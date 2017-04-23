@@ -4,20 +4,14 @@ const Eris    = require('eris');
 const request = require('request');
 const fs      = require('fs');
 const path    = require('path');
-const db      = require('diskdb');
 const util    = require('util');
 const Config  = require('./src/Config');
 
-
-db.connect(__dirname, ['database']);
-
-const guilds = db.database;
-const owner  = '108432868149035008';
+const owner  = process.env.OWNER_ID;
 
 process.on('uncaughtException', function (err) {
     console.log(err);
 });
-
 
 function loadFiles(bot, directory) {
     fs.readdir(path.join(__dirname, 'src', directory), (err, files) => {

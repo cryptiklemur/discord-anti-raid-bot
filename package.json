@@ -1,23 +1,21 @@
 {
-    "name":            "eval-bot",
-    "version":         "1.0.0",
-    "description":     "",
-    "main":            "index.js",
-    "scripts":         {
+    "name": "eval-bot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "author":          "Aaron Scherer <aequasi@gmail.com> (http://aaronscherer.me)",
-    "license":         "ISC",
-    "dependencies":    {
-        "behaviortree":    "^1.0.3",
-        "commander":       "^2.9.0",
-        "diskdb":          "^0.1.17",
-        "eris":            "github:abalabahaha/eris#dev",
-        "erlpack":         "hammerandchisel/erlpack",
+    "author": "Aaron Scherer <aequasi@gmail.com> (http://aaronscherer.me)",
+    "license": "ISC",
+    "dependencies": {
+        "commander": "^2.9.0",
+        "eris": "github:abalabahaha/eris#dev",
+        "erlpack": "hammerandchisel/erlpack",
         "moment-timezone": "^0.5.13",
-        "mongoose":        "^4.9.5",
-        "node-mutex":      "^0.2.2",
-        "request":         "^2.81.0"
+        "mongoose": "^4.9.5",
+        "node-mutex": "^0.2.2",
+        "request": "^2.81.0"
     },
     "devDependencies": {
         "nodemon": "^1.11.0"

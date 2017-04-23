@@ -1,7 +1,7 @@
 const util                  = require("util");
 const AbstractCommand       = require('./AbstractCommand');
 const RaidWebhookSubCommand = require('./SubCommand/RaidWebhookSubCommand');
-const owner                 = '108432868149035008';
+const owner                 = process.env.OWNER_ID;
 
 class EvalCommand extends AbstractCommand {
     get name() {
