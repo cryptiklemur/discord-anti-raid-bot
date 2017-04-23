@@ -81,6 +81,10 @@ program
         bot.on('warn', console.log);
         bot.on('error', console.log);
         bot.on('messageCreate', msg => {
+            if (!msg.command) {
+                return;
+            }
+            
             let builder = "";
             
             const channel = msg.channel;
