@@ -28,17 +28,18 @@ class RaidAgeSubCommand extends AbstractSubCommand {
             return;
         }
         
-        let duration;
-        try {
-            duration = Helper.ParseDuration(args.join(" ").toLowerCase());
-        } catch (error) {
-            await message.reply("Invalid duration. Format is `0d 0h0m0s`. Leading periods are optional.");
-            
-            return;
+        let duration = args.join(" ").toLowerCase();
+        if (duration !== 'all') {
+            try {
+                duration = Helper.ParseDuration(duration);
+            } catch (error) {
+                await message.reply("Invalid duration. Format is `0d 0h0m0s`. Leading periods are optional.");
+        
+                return;
+            }
         }
     
-    
-        this.config.set('age', args.join(" ").toLowerCase());
+        this.config.set('age', duration);
         await this.config.save();
         
         await message.addReaction("👍🏻");
