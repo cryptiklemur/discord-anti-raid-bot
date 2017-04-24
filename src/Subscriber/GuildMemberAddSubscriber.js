@@ -18,6 +18,7 @@ class GuildCreateSubscriber extends AbstractSubscriber {
     }
     
     async handleUser(type, guild, member) {
+        const config = await this.bot.config.get(guild);
         if (config.webhook) {
             request({
                 method: 'post',
