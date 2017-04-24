@@ -4,6 +4,7 @@ const AbstractSubscriber = require('./AbstractSubscriber');
 const Helper             = require('../Helper.js');
 const KickQueue          = require('../Queue/KickQueue.js');
 const BanQueue           = require('../Queue/BanQueue.js');
+const Join               = require('../Model/Join');
 
 class GuildCreateSubscriber extends AbstractSubscriber {
     constructor(bot) {
@@ -18,7 +19,24 @@ class GuildCreateSubscriber extends AbstractSubscriber {
     }
     
     async handleUser(type, guild, member) {
+        const join = new Join({
+            guildId:    guild.id,
+            userId:     member.id,
+            insertData: Date.now(),
+            handled:    true,
+            method:     type,
+            handleDate: Date.now()
+        });
+        
         const config = await this.bot.config.get(guild);
+        if (!config.enabled) {
+            join.handled = false;
+            join.handleDate = undefined;
+            await join.save();
+            
+            return;
+        }
+        
         if (config.webhook) {
             request({
                 method: 'post',
@@ -31,20 +49,22 @@ class GuildCreateSubscriber extends AbstractSubscriber {
                 url:    config.webhook
             });
         }
-    
+        
         if (type === 'notify') {
             if (!config.webhook) {
                 return console.error("No webhook defined for " + guild.id);
             }
-        
+    
+            await join.save();
+            
             return;
         }
-    
+        
         let message = config.message;
         if (config.invite) {
             message += "\n\n" + config.invite;
         }
-    
+        
         setTimeout(
             async () => {
                 try {
@@ -53,20 +73,20 @@ class GuildCreateSubscriber extends AbstractSubscriber {
                 } catch (e) {
                     // Do nothing, still want to kick/ban
                 }
-            
-            
+                
+                
                 if (type === 'kick') {
                     if (!this.kickQueues[guild.id]) {
                         this.kickQueues[guild.id] = new KickQueue(this.bot, guild);
                     }
-                
-                    this.kickQueues[guild.id].push(member);
+                    
+                    this.kickQueues[guild.id].push({member, join});
                 } else {
                     if (!this.banQueues[guild.id]) {
                         this.banQueues[guild.id] = new BanQueue(this.bot, guild);
                     }
-                
-                    this.banQueues[guild.id].push(member);
+                    
+                    this.banQueues[guild.id].push({member, join});
                 }
             },
             300
@@ -78,7 +98,7 @@ class GuildCreateSubscriber extends AbstractSubscriber {
         if (config.status === 'disabled') {
             return;
         }
-    
+        
         const type = config.method;
         if (config.age !== 'all') {
             const age  = Helper.ParseDuration(config.age).asMilliseconds();
@@ -87,7 +107,7 @@ class GuildCreateSubscriber extends AbstractSubscriber {
                 return;
             }
         }
-
+        
         await this.handleUser(type, guild, member);
     }
 }

@@ -12,6 +12,7 @@ class BanQueue extends AbstractQueue {
             
             try {
                 await item.member.ban();
+                await item.join.save();
             } catch (e) {
                 item.attempt++;
                 if (item.attempt < 50) {

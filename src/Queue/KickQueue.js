@@ -12,6 +12,7 @@ class KickQueue extends AbstractQueue {
             
             try {
                 await item.member.kick();
+                await item.join.save();
             } catch (e) {
                 item.attempt++;
                 if (item.attempt < 50) {
