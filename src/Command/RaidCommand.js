@@ -37,7 +37,7 @@ class RaidCommand extends AbstractCommand {
     
     async run(message, args) {
         if (args.length === 0) {
-            await this.bot.createMessage({
+            await this.bot.createMessage(message.channel.id, {
                 embed: {
                     title: "Current raid mode status",
                     fields: [
