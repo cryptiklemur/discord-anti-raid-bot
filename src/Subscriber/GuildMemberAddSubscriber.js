@@ -1,25 +1,20 @@
 const request            = require('request');
 const moment             = require('moment-timezone');
+const mongoose           = require('mongoose');
 const AbstractSubscriber = require('./AbstractSubscriber');
 const Helper             = require('../Helper.js');
 const KickQueue          = require('../Queue/KickQueue.js');
 const BanQueue           = require('../Queue/BanQueue.js');
 const Join               = require('../Model/Join');
+const Long               = mongoose.Types.Long;
 
 class GuildCreateSubscriber extends AbstractSubscriber {
-    constructor(bot) {
-        super(bot);
-        
-        this.kickQueues = {};
-        this.banQueues  = {};
-    }
-    
     get event() {
         return 'guildMemberAdd';
     }
     
     async handleUser(type, guild, member) {
-        const join   = new Join({guildId: guild.id, userId: member.id, method: type});
+        const join   = new Join({guildId: Long.fromString(guild.id), userId: Long.fromString(member.id), method: type});
         const config = await this.bot.config.get(guild);
         if (!config.enabled) {
             join.handled    = false;
@@ -29,7 +24,7 @@ class GuildCreateSubscriber extends AbstractSubscriber {
             return;
         }
         
-        if (config.whitelist.findIndex(x => x === member.id) >= 0) {
+        if (config.whitelist.findIndex(x => x.toString() === member.id) >= 0) {
             join.handled     = false;
             join.handleDate  = undefined;
             join.whitelisted = true;
@@ -77,17 +72,17 @@ class GuildCreateSubscriber extends AbstractSubscriber {
                 
                 
                 if (type === 'kick') {
-                    if (!this.kickQueues[guild.id]) {
-                        this.kickQueues[guild.id] = new KickQueue(this.bot, guild);
+                    if (!this.bot.kickQueues[guild.id]) {
+                        this.bot.kickQueues[guild.id] = new KickQueue(this.bot, guild);
                     }
                     
-                    this.kickQueues[guild.id].push({member, join});
+                    this.bot.kickQueues[guild.id].push({member, join});
                 } else {
-                    if (!this.banQueues[guild.id]) {
-                        this.banQueues[guild.id] = new BanQueue(this.bot, guild);
+                    if (!this.bot.banQueues[guild.id]) {
+                        this.bot.banQueues[guild.id] = new BanQueue(this.bot, guild);
                     }
                     
-                    this.banQueues[guild.id].push({member, join});
+                    this.bot.banQueues[guild.id].push({member, join});
                 }
             },
             300

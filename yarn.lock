@@ -319,13 +319,13 @@ dom-serializer@0, dom-serializer@~0.1.0:
     domelementtype "~1.1.1"
     entities "~1.1.1"
 
-domelementtype@1, domelementtype@~1.1.1:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/domelementtype/-/domelementtype-1.1.3.tgz#bd28773e2642881aec51544924299c5cd822185b"
-
-domelementtype@^1.3.0:
+domelementtype@1, domelementtype@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/domelementtype/-/domelementtype-1.3.0.tgz#b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
+
+domelementtype@~1.1.1:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/domelementtype/-/domelementtype-1.1.3.tgz#bd28773e2642881aec51544924299c5cd822185b"
 
 domhandler@^2.3.0:
   version "2.3.0"
@@ -998,6 +998,10 @@ mongodb@2.2.25:
     es6-promise "3.2.1"
     mongodb-core "2.1.9"
     readable-stream "2.1.5"
+
+mongoose-long@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/mongoose-long/-/mongoose-long-0.1.1.tgz#cc32e05b0cf50c85e25a19359d43a936fe9505a3"
 
 mongoose@^4.9.5:
   version "4.9.5"

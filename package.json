@@ -15,6 +15,7 @@
         "erlpack": "hammerandchisel/erlpack",
         "moment-timezone": "^0.5.13",
         "mongoose": "^4.9.5",
+        "mongoose-long": "^0.1.1",
         "node-mutex": "^0.2.2",
         "request": "^2.81.0"
     },

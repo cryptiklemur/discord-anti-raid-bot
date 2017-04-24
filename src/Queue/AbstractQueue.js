@@ -12,8 +12,8 @@ class AbstractQueue {
         setInterval(this.tick.bind(this), 100);
     }
     
-    push({member, join}) {
-        this.items.push({member, join, attempt: 0});
+    push({id, member, join}) {
+        this.items.push({id, member, join, attempt: 0});
         
         return this;
     }

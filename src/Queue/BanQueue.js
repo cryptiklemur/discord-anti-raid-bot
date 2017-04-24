@@ -11,8 +11,18 @@ class BanQueue extends AbstractQueue {
             }
             
             try {
-                await item.member.ban();
-                await item.join.save();
+                if (item.member) {
+                    await item.member.ban(1);
+                } else if (item.id) {
+                    console.log(`Banning from ${this.guild.id}: ${item.id}`);
+                    await this.guild.banMember(item.id, 1);
+                } else {
+                    throw new Error("Item with no member or id");
+                }
+                
+                if (item.join) {
+                    await item.join.save();
+                }
             } catch (e) {
                 item.attempt++;
                 if (item.attempt < 50) {

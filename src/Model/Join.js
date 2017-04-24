@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
-const Schema   = mongoose.Schema;
+require('mongoose-long')(mongoose);
+const Long   = mongoose.Types.Long;
+const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    guildId:     String,
-    userId:      String,
+    guildId:     Long,
+    userId:      Long,
     handled:     {type: Boolean, default: true},
     whitelisted: {type: Boolean, default: false},
     method:      {type: String, enum: ['kick', 'notify', 'ban']},

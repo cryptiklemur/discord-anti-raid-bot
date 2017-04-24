@@ -34,11 +34,11 @@ class RaidWhitelistSubCommand extends AbstractSubCommand {
         }
         
         let whitelist = this.config.whitelist;
-        let index = whitelist.findIndex(x => x === args[0]);
+        let index = whitelist.findIndex(x => x.toString() === args[0]);
         if (index >= 0) {
             whitelist.splice(index, 1);
         } else {
-            whitelist.push(args[0]);
+            whitelist.push(Long.fromString(args[0]));
         }
         
         this.config.set('whitelist', whitelist);

@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
+require('mongoose-long')(mongoose);
+const Long = mongoose.Types.Long;
 const Schema   = mongoose.Schema;
 
 const cache = {};
 
 const schema = new Schema({
-    guildId:   String,
+    guildId:   Long,
     prefix:    String,
     enabled:   {type: Boolean},
     age:       String,
     method:    {type: String, enum: ['kick', 'notify', 'ban']},
     message:   String,
     webhook:   String,
-    whitelist: [String],
+    whitelist: [Long],
     invite:    String,
 });
 schema.index({guildId: 1});
@@ -33,14 +35,14 @@ class Config {
                 return resolve(cache[guild.id]);
             }
             
-            ConfigModel.findOne({guildId: guild.id}, (err, doc) => {
+            ConfigModel.findOne({guildId: Long.fromString(guild.id)}, (err, doc) => {
                 if (err) {
                     return reject(err);
                 }
                 
                 if (!doc) {
                     doc = new ConfigModel({
-                        guildId: guild.id,
+                        guildId: Long.fromString(guild.id),
                         prefix:  this.defaultPrefix,
                         enabled: false,
                         age:     '24h',

@@ -56,6 +56,9 @@ program
             prefix:      prefix
         });
         
+        bot.banQueues  = [];
+        bot.kickQueues = [];
+        
         bot.config = new Config(prefix);
         
         Eris.Message.prototype.reply      = async function (content, file) {
@@ -70,7 +73,7 @@ program
         Eris.Client.prototype.createPaste = async function (channelId, message, pasteSettings) {
             if (typeof message === 'object') {
                 pasteSettings = message;
-                message = "";
+                message       = "";
             }
             
             return new Promise((resolve, reject) => {
