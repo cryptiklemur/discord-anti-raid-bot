@@ -37,7 +37,18 @@ class RaidCommand extends AbstractCommand {
     
     async run(message, args) {
         if (args.length === 0) {
-            await message.reply("Current raid mode status: " + (this.config.enabled ? 'enabled' : 'disabled'));
+            await this.bot.createMessage({
+                embed: {
+                    title: "Current raid mode status",
+                    fields: [
+                        {inline: true, name: '__Status:__', value: this.config.enabled ? 'enabled' : 'disabled'},
+                        {inline: true, name: '__Invite:__', value: this.config.invite || 'none'},
+                        {inline: true, name: '__Webhook:__', value: this.config.webhook || 'none'},
+                        {inline: true, name: '__Method:__', value: this.config.method || 'kick'},
+                        {inline: true, name: '__Age:__', value: this.config.age || '24h'},
+                    ]
+                }
+            });
             
             return;
         }

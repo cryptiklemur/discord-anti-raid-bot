@@ -82,12 +82,12 @@ class GuildCreateSubscriber extends AbstractSubscriber {
         if (config.age !== 'all') {
             const age  = Helper.ParseDuration(config.age).asMilliseconds();
             const diff = moment.duration(Math.abs(moment().diff(member.createdAt)));
-            if (diff.asMilliseconds() < age) {
-                await this.handleUser(type, guild, member);
+            if (diff.asMilliseconds() >= age) {
+                return;
             }
-        } else {
-            await this.handleUser(type, guild, member);
         }
+
+        await this.handleUser(type, guild, member);
     }
 }
 
