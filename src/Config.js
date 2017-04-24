@@ -10,7 +10,8 @@ const schema = new Schema({
     age:     String,
     method:  {type: String, enum: ['kick', 'notify', 'ban']},
     message: String,
-    webhook: String
+    webhook: String,
+    invite:  String,
 });
 schema.index({guildId: 1});
 schema.index({enabled: 1});
@@ -30,7 +31,7 @@ class Config {
             if (cache[guild.id]) {
                 return resolve(cache[guild.id]);
             }
-    
+            
             ConfigModel.findOne({guildId: guild.id}, (err, doc) => {
                 if (err) {
                     return reject(err);
@@ -52,9 +53,9 @@ class Config {
                         resolve(updatedDoc);
                     });
                 }
-    
+                
                 cache[guild.id] = doc;
-    
+                
                 resolve(doc);
             });
         });
