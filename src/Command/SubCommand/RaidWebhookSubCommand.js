@@ -11,9 +11,7 @@ class RaidWebhookSubCommand extends AbstractSubCommand {
             guildOnly:       true,
             usage:           "[webhook url]",
             requirements:    {
-                permissions: {
-                    "manageGuild": true
-                }
+                roleNames: ["Raid Manager"]
             }
         };
     }

@@ -14,9 +14,7 @@ class RaidAgeSubCommand extends AbstractSubCommand {
             guildOnly:       true,
             usage:           "[age]",
             requirements:    {
-                permissions: {
-                    "manageGuild": true
-                }
+                roleNames: ["Raid Manager"]
             }
         };
     }

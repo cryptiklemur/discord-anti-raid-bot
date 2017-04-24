@@ -9,6 +9,7 @@
     "author": "Aaron Scherer <aequasi@gmail.com> (http://aaronscherer.me)",
     "license": "ISC",
     "dependencies": {
+        "better-pastebin": "^0.3.0",
         "commander": "^2.9.0",
         "eris": "github:abalabahaha/eris#dev",
         "erlpack": "hammerandchisel/erlpack",

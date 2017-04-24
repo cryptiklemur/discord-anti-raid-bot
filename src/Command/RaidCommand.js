@@ -1,9 +1,10 @@
-const AbstractCommand       = require('./AbstractCommand');
-const RaidWebhookSubCommand = require('./SubCommand/RaidWebhookSubCommand');
-const RaidMethodSubCommand  = require('./SubCommand/RaidMethodSubCommand');
-const RaidMessageSubCommand = require('./SubCommand/RaidMessageSubCommand');
-const RaidInviteSubCommand  = require('./SubCommand/RaidInviteSubCommand');
-const RaidAgeSubCommand     = require('./SubCommand/RaidAgeSubCommand');
+const AbstractCommand         = require('./AbstractCommand');
+const RaidWebhookSubCommand   = require('./SubCommand/RaidWebhookSubCommand');
+const RaidMethodSubCommand    = require('./SubCommand/RaidMethodSubCommand');
+const RaidMessageSubCommand   = require('./SubCommand/RaidMessageSubCommand');
+const RaidInviteSubCommand    = require('./SubCommand/RaidInviteSubCommand');
+const RaidAgeSubCommand       = require('./SubCommand/RaidAgeSubCommand');
+const RaidWhitelistSubCommand = require('./SubCommand/RaidWhitelistSubCommand');
 
 class RaidCommand extends AbstractCommand {
     get name() {
@@ -18,9 +19,7 @@ class RaidCommand extends AbstractCommand {
             guildOnly:       true,
             usage:           "[status=on|off|enable|disable|enabled|disabled]",
             requirements:    {
-                permissions: {
-                    "manageGuild": true
-                }
+                roleNames: ["Raid Manager"]
             }
         };
     }
@@ -31,7 +30,8 @@ class RaidCommand extends AbstractCommand {
             RaidMethodSubCommand,
             RaidMessageSubCommand,
             RaidInviteSubCommand,
-            RaidAgeSubCommand
+            RaidAgeSubCommand,
+            RaidWhitelistSubCommand,
         ];
     }
     
@@ -39,7 +39,7 @@ class RaidCommand extends AbstractCommand {
         if (args.length === 0) {
             await this.bot.createMessage(message.channel.id, {
                 embed: {
-                    title: "Current raid mode status",
+                    title:  "Current raid mode status",
                     fields: [
                         {inline: true, name: '__Status:__', value: this.config.enabled ? 'enabled' : 'disabled'},
                         {inline: true, name: '__Invite:__', value: this.config.invite || 'none'},

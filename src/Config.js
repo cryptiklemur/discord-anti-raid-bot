@@ -4,14 +4,15 @@ const Schema   = mongoose.Schema;
 const cache = {};
 
 const schema = new Schema({
-    guildId: String,
-    prefix:  String,
-    enabled: {type: Boolean},
-    age:     String,
-    method:  {type: String, enum: ['kick', 'notify', 'ban']},
-    message: String,
-    webhook: String,
-    invite:  String,
+    guildId:   String,
+    prefix:    String,
+    enabled:   {type: Boolean},
+    age:       String,
+    method:    {type: String, enum: ['kick', 'notify', 'ban']},
+    message:   String,
+    webhook:   String,
+    whitelist: [String],
+    invite:    String,
 });
 schema.index({guildId: 1});
 schema.index({enabled: 1});

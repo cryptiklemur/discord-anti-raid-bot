@@ -14,9 +14,7 @@ class RaidInviteSubCommand extends AbstractSubCommand {
             guildOnly:       true,
             usage:           "[invite]",
             requirements:    {
-                permissions: {
-                    "manageGuild": true
-                }
+                roleNames: ["Raid Manager"]
             }
         };
     }

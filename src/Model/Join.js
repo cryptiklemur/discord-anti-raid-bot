@@ -2,12 +2,13 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 
 const schema = new Schema({
-    guildId:    String,
-    userId:     String,
-    handled:    Boolean,
-    method:     {type: String, enum: ['kick', 'notify', 'ban']},
-    insertDate: Date,
-    handleDate: Date
+    guildId:     String,
+    userId:      String,
+    handled:     {type: Boolean, default: true},
+    whitelisted: {type: Boolean, default: false},
+    method:      {type: String, enum: ['kick', 'notify', 'ban']},
+    insertDate:  {type: Date, default: Date.now},
+    handleDate:  {type: Date, default: Date.now}
 });
 schema.index({guildId: 1});
 schema.index({guildId: 1, userId: 1});

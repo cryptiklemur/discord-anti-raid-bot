@@ -5,9 +5,11 @@ const request = require('request');
 const fs      = require('fs');
 const path    = require('path');
 const util    = require('util');
+const paste   = require('better-pastebin');
 const Config  = require('./src/Config');
 
-const owner  = process.env.OWNER_ID;
+const owner = process.env.OWNER_ID;
+paste.setDevKey(process.env.PASTEBIN_DEV_KEY);
 
 process.on('uncaughtException', function (err) {
     console.log(err);
@@ -28,7 +30,7 @@ function loadFiles(bot, directory) {
                     continue;
                 }
                 
-                let cls = require(`./src/${directory}/${file}`);
+                let cls      = require(`./src/${directory}/${file}`);
                 let instance = new cls(bot);
                 console.log(`Added ${directory}: ${instance.name || file}`);
                 if (directory === 'Command' && instance.subCommands && instance.subCommands.length > 0) {
@@ -56,25 +58,51 @@ program
         
         bot.config = new Config(prefix);
         
-        Eris.Message.prototype.reply  = async function (content, file) {
+        Eris.Message.prototype.reply      = async function (content, file) {
             return await bot.createMessage(this.channel.id, content, file);
         };
-        Eris.Message.prototype.edit   = async function (content) {
+        Eris.Message.prototype.edit       = async function (content) {
             return await bot.editMessage(this.channel.id, this.id, content);
         };
-        Eris.Message.prototype.delete = async function () {
+        Eris.Message.prototype.delete     = async function () {
             return await this.channel.deleteMessage(this.id);
+        };
+        Eris.Client.prototype.createPaste = async function (channelId, message, pasteSettings) {
+            if (typeof message === 'object') {
+                pasteSettings = message;
+                message = "";
+            }
+            
+            return new Promise((resolve, reject) => {
+                paste.login(process.env.PASTEBIN_USERNAME, process.env.PASTEBIN_PASSWORD, (success, data) => {
+                    if (!success) {
+                        console.log("Failed (" + data + ")");
+                        return reject(data);
+                    }
+                    
+                    paste.create(pasteSettings, async (success, data) => {
+                        if (!success) {
+                            console.log("Failed (" + data + ")");
+                            return reject(data);
+                        }
+                        
+                        resolve(await bot.createMessage(channelId, message.length > 0 ? message + "\n" + data : data));
+                    });
+                })
+            })
         };
         
         bot.on("ready", () => {
             console.log("Ready!");
             console.log(bot.guilds.size + " guilds registered");
             
-            bot.config.getAll().then(guilds => {
-                for (let guild of guilds) {
-                    bot.registerGuildPrefix(guild.guildId, guild.prefix || prefix)
-                }
-            })
+            if (process.env.NODE_ENV === 'production') {
+                bot.config.getAll().then(guilds => {
+                    for (let guild of guilds) {
+                        bot.registerGuildPrefix(guild.guildId, guild.prefix || prefix)
+                    }
+                });
+            }
         });
         bot.on('connect', id => console.log("Shard Connected: " + id));
         //bot.on('debug', console.log);

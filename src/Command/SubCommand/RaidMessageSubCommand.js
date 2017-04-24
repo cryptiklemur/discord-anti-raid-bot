@@ -14,9 +14,7 @@ class RaidMessageSubCommand extends AbstractSubCommand {
             guildOnly:       true,
             usage:           "[method]",
             requirements:    {
-                permissions: {
-                    "manageGuild": true
-                }
+                roleNames: ["Raid Manager"]
             }
         };
     }

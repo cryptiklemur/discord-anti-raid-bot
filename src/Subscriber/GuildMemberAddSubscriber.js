@@ -19,19 +19,20 @@ class GuildCreateSubscriber extends AbstractSubscriber {
     }
     
     async handleUser(type, guild, member) {
-        const join = new Join({
-            guildId:    guild.id,
-            userId:     member.id,
-            insertData: Date.now(),
-            handled:    true,
-            method:     type,
-            handleDate: Date.now()
-        });
-        
+        const join   = new Join({guildId: guild.id, userId: member.id, method: type});
         const config = await this.bot.config.get(guild);
         if (!config.enabled) {
-            join.handled = false;
+            join.handled    = false;
             join.handleDate = undefined;
+            await join.save();
+            
+            return;
+        }
+        
+        if (config.whitelist.findIndex(x => x === member.id) >= 0) {
+            join.handled     = false;
+            join.handleDate  = undefined;
+            join.whitelisted = true;
             await join.save();
             
             return;
@@ -54,7 +55,7 @@ class GuildCreateSubscriber extends AbstractSubscriber {
             if (!config.webhook) {
                 return console.error("No webhook defined for " + guild.id);
             }
-    
+            
             await join.save();
             
             return;

@@ -11,9 +11,7 @@ class PrefixCommand extends AbstractCommand {
             caseInsensitive: true,
             guildOnly:       true,
             requirements:    {
-                permissions: {
-                    "manageGuild": true
-                }
+                roleNames: ["Raid Manager"]
             }
         };
     }
